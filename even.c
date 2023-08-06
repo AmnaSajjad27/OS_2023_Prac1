@@ -30,7 +30,7 @@ int main (int argc, char *argv[])
     int n; 
     // ASCII to integer 
     // casting it to stop THE ERROR AH  
-    n = atoi((const char*)argv[1]);
+    n = atoi(argv[1]);
 
     if (n <= 0)
     {
