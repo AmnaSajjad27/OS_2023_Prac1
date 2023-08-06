@@ -5,18 +5,19 @@
 #include <stdlib.h>
 #include <signal.h>
 
+// Moved error hanfling outside the main function 
+// print ouch and yeah
+void sig_hup_handler(int signum)
+{
+    printf("Ouch!");
+}
+void sig_int_handler(int signum)
+{
+    printf("Yeah!");
+}
 
 int main (int argc, char *argv[])
 {
-    // print ouch and yeah
-    void sig_hup_handler(int signum)
-    {
-        printf("Ouch!");
-    }
-    void sig_int_handler(int signum)
-    {
-        printf("Yeah!");
-    }
     // Register signal handler
     signal(SIGHUP, sig_hup_handler);
     signal(SIGINT, sig_int_handler);
