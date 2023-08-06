@@ -9,11 +9,11 @@
 int main (int argc, int *argv[])
 {
     // print ouch and yeah
-    void sig_hup_handler(signum)
+    void sig_hup_handler(int signum)
     {
         printf("Ouch!");
     }
-    void sig_int_handler(signum)
+    void sig_int_handler(int signum)
     {
         printf("Yeah!");
     }
@@ -29,7 +29,13 @@ int main (int argc, int *argv[])
 
     int n; 
     // ASCII to integer 
-    n = atoi(argv[1]);
+    // casting it to stop THE ERROR AH  
+    n = atoi((const char*)argv[1]);
+
+    if (n <= 0)
+    {
+        return(1);
+    }
 
     // for error checking 
     // printf("N passed is %d",n);
