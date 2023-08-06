@@ -41,7 +41,7 @@ int main (int argc, char *argv[])
     // for error checking 
     // printf("N passed is %d",n);
 
-    for (int i = 1; n > 0; i++)
+    for (int i = 0; n > 0; i++)
     {
         //Check if odd
         if (i % 2 == 0)
