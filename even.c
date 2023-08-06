@@ -9,11 +9,11 @@
 // print ouch and yeah
 void sig_hup_handler(int signum)
 {
-    printf("Ouch!");
+    printf("Ouch!\n");
 }
 void sig_int_handler(int signum)
 {
-    printf("Yeah!");
+    printf("Yeah!\n");
 }
 
 int main (int argc, char *argv[])
@@ -47,7 +47,7 @@ int main (int argc, char *argv[])
         if (i % 2 == 0)
         {
             // Print the n
-            printf("%d ",i);
+            printf("%d\n",i);
             sleep(5);
             n--;
         }
