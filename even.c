@@ -15,7 +15,7 @@ void sig_int_handler(int signum)
 {
     printf("Yeah!\n");
 }
-
+// argv needs to be a char 
 int main (int argc, char *argv[])
 {
     // Register signal handler
@@ -29,8 +29,7 @@ int main (int argc, char *argv[])
     }
 
     int n; 
-    // ASCII to integer 
-    // casting it to stop THE ERROR AH  
+    // ASCII to integer  
     n = atoi(argv[1]);
 
     if (n <= 0)
@@ -41,12 +40,14 @@ int main (int argc, char *argv[])
     // for error checking 
     // printf("N passed is %d",n);
 
+    // zero is also even
     for (int i = 0; n > 0; i++)
     {
         //Check if odd
         if (i % 2 == 0)
         {
             // Print the n
+            // Add a newline
             printf("%d\n",i);
             sleep(5);
             n--;
