@@ -27,14 +27,8 @@ shell prompt
 // flushes the output stream 
 void prompt(void)
 {
-fprintf(stdout, "\n msh> ");
+// fprintf(stdout, "\n msh> ");
 fflush(stdout);
-}
-
-// check if command should run in the background  
-int background (char *command)
-{
-    return (command[strlen(command) - 2] == '&' && command[strlen(command) - 1] == ' ');
 }
 
 int main(int argk, char *argv[], char *envp[])
@@ -58,8 +52,8 @@ fflush(stdin);
 // check if end of file, then exist 
 if (feof(stdin)) 
 { /* non-zero on EOF */
-fprintf(stderr, "EOF pid %d feof %d ferror %d\n", getpid(),
-feof(stdin), ferror(stdin));
+// fprintf(stderr, "EOF pid %d feof %d ferror %d\n", getpid(),
+// feof(stdin), ferror(stdin));
 exit(0);
 }
 if (line[0] == '#' || line[0] == '\n' || line[0] == '\000')
@@ -72,6 +66,14 @@ for (i = 1; i < NV; i++)
 v[i] = strtok(NULL, sep);
 if (v[i] == NULL)
 break;
+}
+// chekc if its a background command 
+int background_cmd = 0;
+if (i > 1 && strcmp(v[i - 1], "&") == 0) 
+{
+    background_cmd = 1;
+    v[i - 1] = NULL; // Remove the "&" from token
+    i--; // minus the # of tokens
 }
 
 // built in command cd - changes work directory/ folder
@@ -114,10 +116,10 @@ exit(EXIT_FAILURE);
 }
 default: /* code executed only by parent process */
 {
-    if (!background(line))
+    if (!background_cmd)
     {
         wpid = wait(0);
-        printf("%s done \n", v[0]);
+        // printf("%s done \n", v[0]);
         break;
     }
     else
