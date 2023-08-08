@@ -25,7 +25,7 @@ char line[NL]; /* command input buffer */
 shell prompt
 */
 // flushes the output stream 
-prompt(void)
+void prompt(void)
 {
 fprintf(stdout, "\n msh> ");
 fflush(stdout);
@@ -37,7 +37,7 @@ int background (char *command)
     return (command[strlen(command) - 2] == '&' && command[strlen(command) - 1] == ' ');
 }
 
-main(int argk, char *argv[], char *envp[])
+int main(int argk, char *argv[], char *envp[])
 /* argk - number of arguments */
 /* argv - argument vector from command line */
 /* envp - environment pointer */
@@ -82,6 +82,7 @@ if (strcmp(v[0], "cd") == 0)
     {
         // no directory specificed 
         chdir(getenv("Desktop"));
+        perror("chdir");
         // Testing
         // printf("no dir specified");
     }
@@ -96,18 +97,20 @@ if (strcmp(v[0], "cd") == 0)
     return 0;
 }
 
-
 /* assert i is number of tokens + 1 */
 /* fork a child process to exec the command in v[0] */
 switch (frkRtnVal = fork()) {
 case -1: /* fork returns error to parent process */
 {
+perror("fork");
 break;
 }
 case 0: /* code executed only by child process */
 {
 // excute the command 
 execvp(v[0], v);
+perror("execvp");
+exit(EXIT_FAILURE);
 }
 default: /* code executed only by parent process */
 {
