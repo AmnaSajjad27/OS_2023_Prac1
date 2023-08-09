@@ -15,7 +15,7 @@ Compiler/System : gcc/linux
 #include <stdlib.h>
 #include <signal.h>
 
-#include <stdbool.h>
+// #include <stdbool.h>
 
 #define NV 20 /* max number of command tokens */
 #define NL 100 /* input buffer size */
@@ -88,26 +88,28 @@ if (i > 1 && strcmp(v[i - 1], "&") == 0)
 }
 
 // built in command cd - changes work directory/ folder
-if (strcmp(v[0], "cd") == 0)
-{
+
     if (i > 1)
     {
         if (strcmp(v[1], "..") == 0)
         {
-            chdir("..");
+            if (chdir("..") == -1)
+            {
+                perror("cd");
+            }
         }
         // arg given i.e. cd home
+        
         else if (chdir(v[1] == -1))
         {
             perror("cd");
         }
+        else
+        {
+            fprintf(stderr, "cd: missing argument\n");
+        }
+        continue;
     }
-    else
-    {
-        fprintf(stderr, "cd: missing argument\n");
-    }
-    continue;
-}
 
 /* assert i is number of tokens + 1 */
 /* fork a child process to exec the command in v[0] */
@@ -140,7 +142,7 @@ switch (frkRtnVal = fork())
         else
         {
             wpid = wait(0);
-            printf("[%d]+ Done %s\n", background_counter, v[0]);
+            printf("[%d]+ Done             %s\n", background_counter, v[0]);
         }
         break;
         // return frkRtnVal;
