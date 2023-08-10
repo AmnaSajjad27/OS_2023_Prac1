@@ -29,8 +29,8 @@ int background_counter = 0;
 /* shell prompt, flushes the output stream */
 void prompt(void)
 {
-// fprintf(stdout, "\n msh> ");
-fflush(stdout);
+    // fprintf(stdout, "\n msh> ");
+    fflush(stdout);
 }
 
 // Main function 
@@ -64,7 +64,9 @@ while (1)
         exit(0);
     }
     if (line[0] == '#' || line[0] == '\n' || line[0] == '\000')
+    {
         continue; /* to prompt */
+    }
 
     // v[0] holds the command and v[i] hold its arguments 
     v[0] = strtok(line, sep);
@@ -99,14 +101,10 @@ if (i > 1 && strcmp(v[i - 1], "&") == 0)
             }
         }
         // arg given i.e. cd home
-        
-        else if (chdir(v[1] == -1))
+        // WRONG PARENTHIS WTF
+        else if (chdir(v[1]) == -1)
         {
             perror("cd");
-        }
-        else
-        {
-            fprintf(stderr, "cd: missing argument\n");
         }
         continue;
     }
@@ -142,7 +140,7 @@ switch (frkRtnVal = fork())
         else
         {
             wpid = wait(0);
-            printf("[%d]+ Done             %s\n", background_counter, v[0]);
+            printf("[%d]+ Done       %s\n", background_counter, v[0]);
         }
         break;
         // return frkRtnVal;
