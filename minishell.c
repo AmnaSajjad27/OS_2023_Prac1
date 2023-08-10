@@ -139,7 +139,8 @@ switch (frkRtnVal = fork())
         }
         else
         {
-            wpid = wait(0);
+            // changed wait 0 to &wpid
+            wpid = wait(&wpid);
             printf("[%d]+ Done       %s\n", background_counter, v[0]);
         }
         break;
