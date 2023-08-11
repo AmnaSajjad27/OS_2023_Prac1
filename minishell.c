@@ -89,6 +89,22 @@ if (i > 1 && strcmp(v[i - 1], "&") == 0)
     i--; // minus the # of tokens
 }
 
+// Background processes handling
+if (background_counter > 0)
+{
+    int stat;
+    int res;
+    for (int counter = 1; counter <= background_counter; counter++)
+    {
+        res = waitpid(-1, &stat, WNOHANG);
+        if (res > 0)
+        {
+            printf("[%d]+ Done       %s\n", counter, v[0]);
+            background_counter--;
+        }
+    }
+}
+
 // built in command cd - changes work directory/ folder
 
     if (i > 1)
