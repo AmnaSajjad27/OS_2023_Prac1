@@ -99,7 +99,9 @@ if (background_counter > 0)
         res = waitpid(-1, &stat, WNOHANG);
         if (res > 0)
         {
-            printf("[%d]+ Done       %s\n", counter, v[0]);
+            printf("[%d]+ Done                     %s\n", counter, v[0]);
+            // as advised on piazza
+            fflush(stdout);
             background_counter--;
         }
     }
@@ -160,7 +162,7 @@ switch (frkRtnVal = fork())
         {
             // changed wait 0 to &wpid
             wpid = wait(&wpid);
-            printf("[%d]+ Done                        %s\n", background_counter, v[0]);
+            printf("[%d]+ Done                     %s\n", background_counter, v[0]);
         }
         break;
         // return frkRtnVal;
