@@ -115,7 +115,7 @@ if (background_counter > 0)
             {
                 printf("[%d]+ Done                     ", background_counter);
                 // Reconstruct and print the full command with arguments
-                for (int arg_idx = 0; v[arg_idx] <= cmd_index; arg_idx++)
+                for (int arg_idx = 0; v[arg_idx] != NULL; arg_idx++)
                 {
                     printf("%s ", v[arg_idx]);
                 }
