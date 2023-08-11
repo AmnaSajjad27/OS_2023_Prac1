@@ -138,7 +138,7 @@ switch (frkRtnVal = fork())
         if (background_cmd)
         {
             background_counter++;
-            printf("[%d] %d\n", background_counter, wpid);
+            printf("[%d] %d\n", background_counter, frkRtnVal);
         }
         else
         {
