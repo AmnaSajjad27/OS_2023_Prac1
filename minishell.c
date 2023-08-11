@@ -93,20 +93,23 @@ if (i > 1 && strcmp(v[i - 1], "&") == 0)
 
     if (i > 1)
     {
-        if (strcmp(v[1], "..") == 0)
+        if (strcmp(v[0], "cd") == 0)
         {
-            if (chdir("..") == -1)
+            if (strcmp(v[1], "..") == 0)
+            {
+                if (chdir("..") == -1)
+                {
+                    perror("cd");
+                }
+            }
+            // arg given i.e. cd home
+            // WRONG PARENTHIS WTF
+            else if (chdir(v[1]) == -1)
             {
                 perror("cd");
             }
+            continue;
         }
-        // arg given i.e. cd home
-        // WRONG PARENTHIS WTF
-        else if (chdir(v[1]) == -1)
-        {
-            perror("cd");
-        }
-        continue;
     }
 
 /* assert i is number of tokens + 1 */
