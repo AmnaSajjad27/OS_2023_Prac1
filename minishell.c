@@ -89,20 +89,44 @@ if (i > 1 && strcmp(v[i - 1], "&") == 0)
     i--; // minus the # of tokens
 }
 
+// added lines 103 to 121 to ensure correct printintg for multiple background commands
 // Background processes handling
 if (background_counter > 0)
 {
     int stat;
     int res;
-    for (int counter = 1; counter <= background_counter; counter++)
+
+    while ((res = waitpid(-1, &stat, WNOHANG)) > 0)
     {
-        res = waitpid(-1, &stat, WNOHANG);
-        if (res > 0)
+        if (WIFEXITED(stat) || WIFSIGNALED(stat))
         {
-            printf("[%d]+ Done                     %s\n", counter, v[0]);
-            // as advised on piazza
-            // fflush(stdout);
-            background_counter--;
+            // Find the command associated with the completed background process
+            int cmd_index = -1;
+            for (int bg_idx = 0; bg_idx < i; bg_idx++)
+            {
+                    if (strcmp(v[bg_idx], "&") == 0)
+                    {
+                        cmd_index = bg_idx - 1;
+                        break;
+                    }
+            }
+
+            if (cmd_index >= 0)
+            {
+                printf("[%d]+ Done                     ", background_counter);
+                // Reconstruct and print the full command with arguments
+                for (int arg_idx = 0; v[arg_idx] != NULL; arg_idx++)
+                {
+                    printf("%s ", v[arg_idx]);
+                }
+                printf("\n");
+                background_counter--;
+            }
+        }
+        else if (res == 0)
+        {
+            // No more background processes have finished
+            break;
         }
     }
 }
@@ -121,13 +145,9 @@ if (strcmp(v[0], "cd") == 0)
             }
         }
         // arg given i.e. cd home
-        else if (chdir(v[1]) == -1)
-        {
-            perror("cd");
-        }
-    else
+    else if (chdir(v[1]) == -1)
     {
-        fprintf(stderr, "cd:missing argument\n");
+        perror("cd");
     }
     continue;
     }
@@ -149,7 +169,7 @@ switch (frkRtnVal = fork())
             {
                 // terminate if not properly excuted
                 perror("execvp");
-                exit(EXIT_FAILURE);
+                _exit(EXIT_FAILURE);
             }
         break;
     }
@@ -174,7 +194,7 @@ switch (frkRtnVal = fork())
         printf("\n");
             // fflush(stdout);
         }
-        break;
+        // break;
         // return frkRtnVal;
     }
 }
