@@ -104,22 +104,23 @@ if (background_counter > 0)
             int cmd_index = -1;
             for (int bg_idx = 0; bg_idx < i; bg_idx++)
             {
-                    if (strcmp(v[bg_idx], "&") == 0)
-                    {
-                        cmd_index = bg_idx - 1;
-                        break;
-                    }
+                if (strcmp(v[bg_idx], "&") == 0)
+                {
+                    cmd_index = bg_idx - 1;
+                    break;
+                }
             }
 
             if (cmd_index >= 0)
             {
                 printf("[%d]+ Done                     ", background_counter);
                 // Reconstruct and print the full command with arguments
-                for (int arg_idx = 0; v[arg_idx] != NULL; arg_idx++)
+                for (int arg_idx = 0; v[arg_idx] <= cmd_index; arg_idx++)
                 {
                     printf("%s ", v[arg_idx]);
                 }
                 printf("\n");
+                fflush(stdout);
                 background_counter--;
             }
         }
@@ -179,11 +180,12 @@ switch (frkRtnVal = fork())
         {
             background_counter++;
             printf("[%d] %d\n", background_counter, frkRtnVal);
+            fflush(stdout);
         }
         else
         {
             // changed wait 0 to &wpid
-            wpid = wait(&wpid);
+            wpid = waitpid(frkRtnVal, NULL, 0);
             printf("[%d]+ Done                     ", background_counter);
             
         // Reconstruct and print the full command with arguments
@@ -192,7 +194,7 @@ switch (frkRtnVal = fork())
             printf("%s ", v[arg_idx]);
         }
         printf("\n");
-            // fflush(stdout);
+        fflush(stdout);
         }
         // break;
         // return frkRtnVal;
