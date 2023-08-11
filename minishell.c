@@ -24,7 +24,7 @@ Compiler/System : gcc/linux
 char line[NL]; /* command input buffer */
 
 // to hold the background process count 
-int background_counter = 0;
+int background_counter = 1;
 
 /* shell prompt, flushes the output stream */
 void prompt(void)
@@ -101,35 +101,37 @@ if (background_counter > 0)
         {
             printf("[%d]+ Done                     %s\n", counter, v[0]);
             // as advised on piazza
-            fflush(stdout);
+            // fflush(stdout);
             background_counter--;
         }
     }
 }
 
 // built in command cd - changes work directory/ folder
-
+// check if cd has atleast one argument 
+if (strcmp(v[0], "cd") == 0)
+{
     if (i > 1)
     {
-        if (strcmp(v[0], "cd") == 0)
+        if (strcmp(v[1], "..") == 0)
         {
-            if (strcmp(v[1], "..") == 0)
-            {
-                if (chdir("..") == -1)
-                {
-                    perror("cd");
-                }
-            }
-            // arg given i.e. cd home
-            // WRONG PARENTHIS WTF
-            else if (chdir(v[1]) == -1)
+            if (chdir("..") == -1)
             {
                 perror("cd");
             }
-            continue;
         }
+        // arg given i.e. cd home
+        else if (chdir(v[1]) == -1)
+        {
+            perror("cd");
+        }
+    else
+    {
+        fprintf(stderr, "cd:missing argument\n");
     }
-
+    continue;
+    }
+}
 /* assert i is number of tokens + 1 */
 /* fork a child process to exec the command in v[0] */
 
@@ -142,14 +144,14 @@ switch (frkRtnVal = fork())
     }
     case 0: /* code executed only by child process */
     {
-    // excute the command 
-    if (execvp(v[0], v) == -1)
-    {
-        // terminate if not properly excuted
-        perror("execvp");
-        exit(EXIT_FAILURE);
-    }
-    break;
+        // excute the command 
+        if (execvp(v[0], v) == -1)
+            {
+                // terminate if not properly excuted
+                perror("execvp");
+                exit(EXIT_FAILURE);
+            }
+        break;
     }
     default: /* code executed only by parent process */
     {
@@ -162,7 +164,15 @@ switch (frkRtnVal = fork())
         {
             // changed wait 0 to &wpid
             wpid = wait(&wpid);
-            printf("[%d]+ Done                     %s\n", background_counter, v[0]);
+            printf("[%d]+ Done                     ", background_counter);
+            
+        // Reconstruct and print the full command with arguments
+        for (int arg_idx = 0; v[arg_idx] != NULL; arg_idx++)
+        {
+            printf("%s ", v[arg_idx]);
+        }
+        printf("\n");
+            // fflush(stdout);
         }
         break;
         // return frkRtnVal;
