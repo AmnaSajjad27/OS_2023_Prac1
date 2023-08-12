@@ -31,7 +31,7 @@ void child_finished()
     {
         if (waitpid(child_Pids[i], &children_stat, WNOHANG) != 0)
         {
-            printf("[%d]+ Done                     command_name\n",i+1);
+            printf("[%d]+ Done                     %s\n",i+1, line);
         }
     }
 }
