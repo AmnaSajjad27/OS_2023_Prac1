@@ -53,8 +53,7 @@ while (1)
 
     // check if end of file, then exist 
     if (feof(stdin)) 
-    { 
-    /* non-zero on EOF */
+    {
         exit(0);
     }
     if (line[0] == '#' || line[0] == '\n' || line[0] == '\000')
@@ -80,6 +79,12 @@ if (i > 1 && strcmp(v[i - 1], "&") == 0)
     background_cmd = true;
     v[i - 1] = NULL; // Remove the "&" from token
     // i--; // minus the # of tokens
+}
+
+if (i > 1 && strcmp(v[i - 1], "&") == 0)
+{
+    background_cmd = true;
+    v[i - 1] = NULL;
 }
 
 // cd implementation 
