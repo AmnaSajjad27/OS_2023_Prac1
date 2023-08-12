@@ -107,12 +107,14 @@ switch (frkRtnVal = fork())
         if (!background_cmd)
         {
             child_finished();
-            wait(0);
-            break;
+            // wait for child process
+            waitpid(frkRtnVal, &children_stat, 0);
+            // wait(0);
+            // break;
         }
         else 
         {
-            child_finished();
+            // child_finished();
             processCounter++;
             printf("[%d] %d\n", processCounter, frkRtnVal);
             child_Pids[processCounter] = frkRtnVal;
