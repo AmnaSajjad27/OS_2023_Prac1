@@ -32,6 +32,7 @@ void child_finished()
         if (waitpid(child_Pids[i], &children_stat, WNOHANG) != 0)
         {
             printf("[%d]+ Done                     %s\n",i+1, line);
+            processCounter--;
         }
     }
 }
@@ -56,6 +57,7 @@ while (1)
     {
         exit(0);
     }
+
     if (line[0] == '#' || line[0] == '\n' || line[0] == '\000')
     {
         continue; /* to prompt */
@@ -81,19 +83,12 @@ if (i > 1 && strcmp(v[i - 1], "&") == 0)
     // i--; // minus the # of tokens
 }
 
-if (i > 1 && strcmp(v[i - 1], "&") == 0)
-{
-    background_cmd = true;
-    v[i - 1] = NULL;
-}
-
 // cd implementation 
 if (i > 1 && strcmp(v[0], "cd") == 0 && !background_cmd)
 {
     chdir(v[1]);
     continue;
 }
-
 
 switch (frkRtnVal = fork()) 
 {
@@ -109,7 +104,7 @@ switch (frkRtnVal = fork())
     default: /* code executed only by parent process */
     {
         signal(SIGCHLD, child_finished);
-        if (background_cmd)
+        if (!background_cmd)
         {
             child_finished();
             wait(0);
