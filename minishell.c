@@ -27,12 +27,17 @@ int children_stat;
 
 void child_finished()
 {
+    int status;
+
     for (int i = 0; i < processCounter; i++)
     {
         if (waitpid(child_Pids[i], &children_stat, WNOHANG) != 0)
         {
-            printf("[%d]+ Done                     %s\n",i+1, line);
-            processCounter--;
+            if (WIFEXITED(status) || WIFSIGNALED(status))
+            {
+                printf("[%d]+ Done                     %s\n",i+1, line);
+                processCounter--;
+            }
         }
     }
 }
